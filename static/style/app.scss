@@ -1,0 +1,119 @@
+body {
+    color: #555;
+    padding-top: 50px;
+}
+
+.monster-title {
+    margin-right: 5px;
+}
+.monster-key {
+    font-size: 70%;
+    color: #8492a6;
+    font-style: italic;
+    text-transform: uppercase;
+}
+
+.fade-enter-active, .fade-leave-active {
+    transition: opacity .5s;
+}
+.fade-enter, .fade-leave-to {
+    opacity: 0;
+}
+
+#app {
+    #query {
+        box-sizing: border-box;
+        position: fixed;
+        left: 0;
+        top: 0;
+        right: 0;
+        padding: 10px 10px;
+        background: #fff;
+        transition: box-shadow .5s;
+        display: flex;
+        z-index: 10;
+        
+        &.fixed {
+            box-shadow: 0 2px 4px 0 rgba(0,0,0,.12), 0 0 6px 0 rgba(0,0,0,.04);
+        }
+
+        .query-box {
+            flex: 100%;
+        }
+        .reset-button {
+            flex-shrink: 0;
+            margin-left: 5px;
+        }
+    }
+
+    #mask {
+        position: fixed;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, .6);
+        z-index: 1;
+    }
+
+    #copy-right {
+        margin-bottom: 10px;
+        font-size: 80%;
+
+        a {
+            color: #20a0ff;
+        }
+    }
+    
+    #levels {
+        .level {
+            margin-bottom: 10px;
+        }
+        .monster-table {
+            width: 100%;
+            border-collapse: collapse;
+
+            tr {
+                &:hover {
+                    th, td {
+                        background: #eff2f7;
+                    }
+                }
+
+                th, td {
+                    padding: 5px;
+                    border-bottom: 1px solid #e5e9f2;
+                }
+
+                &:last-child {
+                    th, td {
+                        border-bottom: 0;
+                    }
+                }
+
+                th {
+                    color: #555;
+                    font-weight: normal;
+                    width: 20%;
+                    text-align: right;
+                }
+            }
+            .monster {
+                margin-right: 5px;
+
+                .count, .comment {
+                    color: #99a9bf;
+                }
+                .comment {
+                    font-style: italic;
+                }
+            }
+            .next-round {
+                color: #e5e9f2;
+                font-size: 50%;
+                margin-left: 5px;
+                margin-right: 10px;
+            }
+        }
+    }
+}
