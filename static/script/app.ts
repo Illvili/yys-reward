@@ -24,8 +24,9 @@ var app = new Vue({
         }),
 
         queryFixed: document.body.scrollTop > 0,
-        queryBoxFocused: false,
-        query: ''
+        query: [],
+
+        showMonsterList: false
     },
     watch: {
         query: function (v) {
@@ -41,8 +42,14 @@ var app = new Vue({
         }
     },
     methods: {
-        queryBoxFocusChanged: function (gotFocus) {
-            this.queryBoxFocused = gotFocus
+        selectMonster: function (monster_key) {
+            var index = this.query.indexOf(monster_key)
+
+            if (-1 != index) {
+                this.query.splice(index, 1)
+            } else {
+                this.query.push(monster_key)
+            }
         }
     }
 })

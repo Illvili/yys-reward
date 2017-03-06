@@ -87,20 +87,60 @@ zaoshen 帚神
 `
 
 var monsterList = {}, reverseList = {}, alphabetList = {}
+for (var a = 97; a < 123; a++) {
+    alphabetList[String.fromCharCode(a)] = []
+}
+
 monster_data.split('\n').filter(l => !!l.length).forEach(l => {
     var [k, v] = l.split(' ')
     monsterList[k] = v
     reverseList[v] = k
 
-    if (!alphabetList[k[0]]) {
-        alphabetList[k[0]] = []
-    }
-
     alphabetList[k[0]].push({
         title: v,
-        key: k
+        key: k,
+        type: 'monster'
     })
 })
+
+var riddle_data = `
+b 蝙蝠 吸血姬 xixueji
+d 单眼/石锤/怪力 山兔 shantong
+d 单眼/石菩萨/金刚经 独眼小僧 duyanxiaoseng
+d 大翅膀/风/扇 大天狗 datiangou
+d 稻草人/咒锥 丑时之女 choushizhinv
+f 风筝/青皮肤 天邪鬼青 tianxieguiqing
+h 黑镰/短刀 鬼使黑 guishihei
+h 花/舞 桃花妖 taohuayao
+h 红鬼/拍屁股 天邪鬼赤 tianxieguichi
+h 海/胡须/杖 海坊主 haifangzhu
+k 骷髅/剑/怨恨 骨女 gunv
+m 美丽的女妖怪/身上饰品 鬼女红叶 guinvhongye
+m 冥界/白/夺命 鬼使白 guishibai
+r 人偶/操纵 傀儡师 kuileishi
+t 汤碗/琴/牙牙 孟婆 mengpo
+t 桃/樱花 樱花妖 yinghuayao
+t 薙刀/翅膀/面具 鸦天狗 yatiangou
+z 纸扇/书生/面具 妖狐 yaohu
+z 薙刀/翅膀/面具 鸦天狗 yatiangou
+`
+
+riddle_data.split('\n').filter(l => !!l.length).forEach(l => {
+    var [alpha, desc, monster_title, monster_key] = l.split(' ')
+
+    alphabetList[alpha].push({
+        title: desc,
+        key: monster_key,
+        type: 'riddle',
+        monster: monster_title
+    })
+})
+
+for (var alpha in alphabetList) {
+    if (!alphabetList[alpha].length) {
+        delete alphabetList[alpha]
+    }
+}
 
 export {
     monsterList,

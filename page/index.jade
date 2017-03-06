@@ -1,39 +1,49 @@
 doctype
 html
     head
+        meta(name="viewport", content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0")
         meta(charset="UTF-8")
         title 阴阳师悬赏任务查询
-        link(rel="stylesheet", href="https://unpkg.com/element-ui/lib/theme-default/index.css")
         link(rel="stylesheet", href="/static/style/app.css")
         script(src="https://unpkg.com/vue/dist/vue.js")
-        script(src="https://unpkg.com/element-ui/lib/index.js")
     body
         #app
             #query(:class="{ fixed: queryFixed }")
-                el-select.query-box(v-model="query", filterable, multiple, placeholder="请输入要查询的式神名称，支持拼音", @visible-change="queryBoxFocusChanged")
-                    el-option-group(v-for="(list, alphabet) in monsterData.alphabetList", :label="alphabet.toUpperCase()")
-                        el-option(v-for="monster in list", :value="monster.key", :label="monster.title + ' ' + monster.key")
+                div.query-box(@click="showMonsterList = true")
+                    span.monster(v-for="monster_key in query") {{ monsterData.monsterList[monster_key] }}
+                    span.placeholder(v-if="!query.length") 请点此选择悬赏妖怪
+
+                button.reset-button(icon="close", @click="query = []") 重置
+            #monster-list(v-show="showMonsterList")
+                .controls
+                    a.clear(href="javascript:;", @click="query = []") 重置
+                    .title 选择悬赏妖怪
+                    a.close(href="javascript:;", @click="showMonsterList = false") ×
+                .scroll-wrapper
+                    .group(v-for="(list, alphabet) in monsterData.alphabetList")
+                        div.title {{ alphabet.toUpperCase() }}
+                        label.monster(v-for="monster in list", :class="{ checked: -1 != query.indexOf(monster.key) }")
+                            input.monster-value(type="checkbox", v-model="query", :value="monster.key")
+                            span.check-mark
                             span.monster-title {{ monster.title }}
-                            span.monster-key {{ monster.key }}
-                el-button.reset-button(icon="close", v-show="!!query.length", @click="query = []") 重置
-            el-card#copy-right
-                div(slot="header") 资料来源
-                a(href="http://bbs.ngacn.cc/read.php?tid=10046440", target="_blank") [无聊水一发] 1-18章 怪物统计，方便国庆活动。新加妖气封印与鬼王搜索
-                br
-                a(href="http://bbs.ngacn.cc/read.php?&tid=10040666", target="_blank") [我不想要碎片，我只想要赏金]阴阳师御魂本怪物分布(更新了部分神秘悬赏怪物谜底及分布
+                                span.riddle(v-if="monster.type == 'riddle'") 迷
+                            span.monster-key(v-if="monster.type == 'riddle'") {{ monster.monster }}
             #levels
-                el-card.level(v-for="level in levelData", v-show="level.show")
-                    div(slot="header") {{ level.title }}
+                div.level(v-for="level in levelData", v-show="level.show")
+                    div.level-header {{ level.title }}
                     div.level-body
-                        table.monster-table: tbody: tr(v-for="monster in level.monsters")
-                            th {{ monster.label }}
-                            td
-                                template(v-for="m in monster.monsters")
-                                    el-tag.monster(:type="!query || -1 == query.indexOf(m.monsterKey) ? 'primary' : 'success'", v-if="m != '>'") {{ m.monster }}
-                                        span.count(v-if="m.count > 1")  × {{ m.count }}
-                                        span.comment(v-if="m.comment")  {{ m.comment }}
-                                    span.next-round(v-else)
-                                        i.el-icon-d-arrow-right
-            transition(name="fade")
-                #mask(v-show="queryBoxFocused")
+                        .monster-table
+                            .monster-shown(v-for="monster in level.monsters")
+                                .lable {{ monster.label }}
+                                .monster-list
+                                    template(v-for="m in monster.monsters")
+                                        span.monster(:class="{ selected: -1 != query.indexOf(m.monsterKey) }", v-if="m != '>'", @click="selectMonster(m.monsterKey)") {{ m.monster }}
+                                            span.count(v-if="m.count > 1")  × {{ m.count }}
+                                            span.comment(v-if="m.comment")  {{ m.comment }}
+                                        span.next-round(v-else) ∼
+            #copy-right
+                div.title 资料来源
+                ul.list
+                    li: a(href="http://bbs.ngacn.cc/read.php?tid=10046440", target="_blank") [无聊水一发] 1-18章 怪物统计，方便国庆活动。新加妖气封印与鬼王搜索
+                    li: a(href="http://bbs.ngacn.cc/read.php?&tid=10040666", target="_blank") [我不想要碎片，我只想要赏金]阴阳师御魂本怪物分布(更新了部分神秘悬赏怪物谜底及分布
         script(src="/static/script/app.js")
